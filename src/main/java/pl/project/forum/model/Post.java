@@ -3,7 +3,7 @@ package pl.project.forum.model;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.xml.crypto.Data;
+
 
 @Entity(name = "post")
 @Table(name = "post")
