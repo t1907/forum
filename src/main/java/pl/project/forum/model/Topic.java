@@ -3,25 +3,22 @@ package pl.project.forum.model;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.xml.crypto.Data;
 
-@Entity(name = "post")
-@Table(name = "post")
+@Entity(name = "topic")
+@Table(name = "topic")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Post {
+public class Topic {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String context;
+    private String name;
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToOne
-    @JoinColumn(name = "topic_id")
-    private Topic topic;
+    @JoinColumn(name = "category_id")
+    private Category category;
+
 }
