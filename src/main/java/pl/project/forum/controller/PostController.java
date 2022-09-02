@@ -42,9 +42,9 @@ public class PostController {
         Post updatePost = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post nie istnieje"));
 
-        updatePost.setContext(updatePost.getContext());
-        updatePost.setTopic(updatePost.getTopic());
-        updatePost.setUser(updatePost.getUser());
+        updatePost.setContext(post.getContext());
+        updatePost.setTopic(post.getTopic());
+        updatePost.setUser(post.getUser());
 
         postRepository.save(updatePost);
 
