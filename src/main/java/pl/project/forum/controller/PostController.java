@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.project.forum.model.Post;
 import pl.project.forum.repository.PostRepository;
+import pl.project.forum.service.PostService;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,46 +16,40 @@ import java.util.Optional;
 public class PostController {
 
     @Autowired
-    PostRepository postRepository;
+    PostService service;
 
     @GetMapping(value = "/get/all")
     public ResponseEntity<List<Post>> getAll(){
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = service.getAll();
         return ResponseEntity.ok(posts);
     }
 
     @GetMapping(value = "/get/{id}")
-    public ResponseEntity<Optional<Post>> getPostById(@PathVariable Long id){
-        Optional<Post> postFromDB = postRepository.findById(id);
+    public ResponseEntity<Post> getPostById(@PathVariable Long id){
+        Post postFromDB = service.getById(id);
         return ResponseEntity.ok(postFromDB);
     }
 
     @PostMapping(value = "/add")
     public ResponseEntity add(@RequestBody Post post){
-        Post newPost = postRepository.save(post);
+        Post newPost = service.add(post);
         return ResponseEntity.ok(newPost);
     }
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<Post> updatePost(@RequestBody Post post, @PathVariable Long id){
-        Post updatePost = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post nie istnieje"));
-
+        Post updatePost = service.getById(id);
         updatePost.setContext(post.getContext());
         updatePost.setTopic(post.getTopic());
         updatePost.setUser(post.getUser());
-
-        postRepository.save(updatePost);
-
+        service.add(updatePost);
         return ResponseEntity.ok(updatePost);
     }
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<Post> deletePost(@PathVariable Long id){
-        Post deletePost = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post nie istnieje"));
-
-        postRepository.delete(deletePost);
+        Post deletePost = service.getById(id);
+        service.delete(deletePost);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
